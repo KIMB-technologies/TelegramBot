@@ -13,11 +13,11 @@ services:
     restart: always
     environment:
       - TELEGRAM_API_TOKEN=tbf
-	    - MAIL_SERVER=tbf
-	    - MAIL_USER=tbf
-	    - MAIL_PW=tbf
-	    - SYSDOMAIN=tbf
-	    - DELETMAILS=tbf
+      - MAIL_SERVER=tbf
+      - MAIL_USER=tbf
+      - MAIL_PW=tbf
+      - SYSDOMAIN=tbf
+      - DELETMAILS=tbf
     networks:
       mailman_mailman:
         ipv4_address: 172.19.199.8
