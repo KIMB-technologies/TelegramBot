@@ -10,6 +10,7 @@ services:
     container_name: telegram_mail
     volumes:
       - /var/docker-compose/telegram/rules.php:/home/php/telegram/rules.php:ro
+      - /var/docker-compose/telegram/log/:/home/php/telegram/log
     restart: always
     environment:
       - TELEGRAM_API_TOKEN=tbf
@@ -18,14 +19,5 @@ services:
       - MAIL_PW=tbf
       - SYSDOMAIN=tbf
       - DELETMAILS=tbf
-    networks:
-      mailman_mailman:
-        ipv4_address: 172.19.199.8
-
-# curl 172.19.199.8 => bei neuen Mails aufrufen!
-
-networks:
-    mailman_mailman:
-        external: true
 
 ```
