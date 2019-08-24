@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  telebot:
+    container_name: telegram_mail
+    volumes:
+      - ./rules.php:/home/php/telegram/rules.php:ro
+      - ./log:/home/php/telegram/log
+    ports:
+      - "127.0.0.1:8080:80"
+    build:
+      context: .
+    environment:
+      - TELEGRAM_API_TOKEN=tbf
+      - MAIL_SERVER=tbf
+      - MAIL_USER=tbf
+      - MAIL_PW=tbf
+      - SYSDOMAIN=tbf
+      - DELETMAILS=true
