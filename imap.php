@@ -73,7 +73,7 @@ class IMAP {
 			$header = imap_fetchheader( $this->imap_stream, $mail->msgno );
 			
 			$tos = array();
-			preg_match_all( '/(?:[^-]To|CC|BCC|Envelope-To):.*(?<=[:< ])([A-Za-z0-9\+\-\_\.]+)(?=\@'. str_replace( '.', '\.', CONFIG::$SYSDOMAIN ) .')/i', $header, $tos );
+			preg_match_all( '/(?:[^-]To:|CC:|BCC:|Envelope-To:|for ).*(?<=[:< ])([A-Za-z0-9\+\-\_\.]+)(?=\@'. str_replace( '.', '\.', CONFIG::$SYSDOMAIN ) .')/i', $header, $tos );
 			$tos = array_map( 'strtolower', $tos[1] );
 
 			$mime = stripos( $header, 'MIME-Version: 1.0' ) !== false;
