@@ -1,5 +1,9 @@
 # Docker Telegram Bot
 
+## Configuration
+
+## Setup
+
 ```yaml
 
 version: '2'
@@ -21,3 +25,4 @@ services:
       - DELETMAILS=tbf
 
 ```
+
