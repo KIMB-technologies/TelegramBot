@@ -8,7 +8,8 @@ RUN apk add --update --no-cache curl-dev libcap imap-dev openssl-dev \
     && docker-php-ext-install imap \
     && setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/php \
     && addgroup -S php && adduser -S php -G php \
-    && mkdir -p /home/php/telegram/ 
+    && mkdir -p /home/php/telegram/ \
+    && mkdir /home/php/telegram/log
 
 # copy all files
 WORKDIR /home/php/telegram/
