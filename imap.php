@@ -42,19 +42,20 @@ class IMAP {
 		}	
 	}
 
-	private function partAnalyse( $mail, $parts, $prefix = '' ){
+	private function partAnalyse( $mail, $parts, $prefix = ''){
+		$simplecontent = array();
 		foreach( $parts as $key => $part ){
-			if( $part->type == TYPETEXT && !$part->ifdisposition ){
-				$simplecontent = $this->decodeEncodedBody( $part->encoding, imap_fetchbody( $this->imap_stream, $mail->msgno, $prefix . ($key + 1) ) );
-				if( $part->subtype == 'PLAIN' ){
-					$simplecontentPLAIN = $simplecontent;
-				}
+			if( $part->type == TYPETEXT ){
+				$simplecontent[] = array(
+					$part->subtype == 'PLAIN' ? 'plain' : 'other',
+					$this->decodeEncodedBody( $part->encoding, imap_fetchbody( $this->imap_stream, $mail->msgno, $prefix . ($key + 1) ) )
+				);
 			}
 			if( isset( $part->parts ) ){
-				$simplecontent = $this->partAnalyse( $mail, $part->parts, $prefix . ($key + 1) . '.' );
+				$simplecontent = array_merge( $simplecontent, $this->partAnalyse( $mail, $part->parts, $prefix . ($key + 1) . '.'));
 			}
 		}
-		return empty( $simplecontentPLAIN ) ? $simplecontent : $simplecontentPLAIN;
+		return $simplecontent;
 	}
 
 	public function getNew(){
@@ -88,8 +89,16 @@ class IMAP {
 						$mimetype .= "; ". $p->attribute . '="' . $p->value . '"';
 					}
 				}
+
 				if( isset($structure->parts) ){
 					$simplecontent = $this->partAnalyse( $mail, $structure->parts );
+					if( in_array( 'plain', array_column( $simplecontent, 0 ) ) ){
+						// plain vorhanden, wollen nur diese
+						$simplecontent = array_filter( $simplecontent, function ($ar) {
+							return $ar[0] == 'plain';
+						});
+					}
+					$simplecontent = implode( "\r\n", array_column( $simplecontent, 1 ) );
 				}
 				else {
 					$simplecontent = $this->decodeEncodedBody( $structure->encoding, $body);
@@ -98,14 +107,10 @@ class IMAP {
 			}
 
 			$return[] = array(
-				'content' => $body,
 				'subject' => isset($mail->subject) ? $mail->subject : '',
 				'from' => isset($mail->from) ? $mail->from : '',
 				'to' => array_unique( $tos ),
-				'mime' => $mime,
-				'ct' => $mime ? $mimetype : 'text/plain',
 				'simplecontent' => mb_substr( $simplecontent, 0, 3500),
-				'encoding' => empty( $encoding ) ? '' : $encoding
 			);
 
 			if( CONFIG::$DELETMAILS ){
