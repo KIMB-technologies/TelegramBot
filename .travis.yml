@@ -4,11 +4,4 @@ services:
 jobs:
   include:
     - stage: build docker image
-      script:
-      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - docker build -t telegrambot .
-      - docker images
-      - docker tag telegrambot kimbtechnologies/telegrambot:$TRAVIS_COMMIT
-      - docker tag telegrambot kimbtechnologies/telegrambot:latest
-      - docker push kimbtechnologies/telegrambot:$TRAVIS_COMMIT
-      - docker push kimbtechnologies/telegrambot:latest
+      script: bash ./dockerpublish.sh
