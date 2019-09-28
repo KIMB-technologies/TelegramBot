@@ -1,6 +1,9 @@
 services:
   - docker
 
+before_script:
+  - rm -rf .git/ *.md docker-compose.*
+
 jobs:
   include:
     - stage: build docker image
