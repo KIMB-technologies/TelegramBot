@@ -4,7 +4,7 @@ FROM php:alpine
 RUN apk add --update --no-cache curl-dev libcap imap-dev openssl-dev \
     && docker-php-ext-install sockets \ 
     && docker-php-ext-install curl \
-    && docker-php-ext-configure imap --with-imap --with-imap-ssl \
+    && PHP_OPENSSL=yes docker-php-ext-configure imap --with-imap --with-imap-ssl \
     && docker-php-ext-install imap \
     && setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/php \
     && addgroup -S php && adduser -S php -G php \
