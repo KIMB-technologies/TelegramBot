@@ -1,4 +1,7 @@
 <?php
+// Fix file/dir owners on startup
+exec("/bin/cchown");
+
 // Start Server
 $sock = socket_create( AF_INET, SOCK_STREAM, SOL_TCP );
 if( socket_bind( $sock, '0.0.0.0', '80' ) ){

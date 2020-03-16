@@ -11,6 +11,18 @@ RUN apk add --update --no-cache curl-dev libcap imap-dev openssl-dev \
     && mkdir -p /home/php/telegram/ \
     && mkdir /home/php/telegram/log
 
+# Owner for bind-mounted directories
+RUN apk add --no-cache --virtual .build-deps build-base \
+	&& echo "#include <sys/types.h>" > /bin/cchown.c \
+	&& echo "#include <unistd.h>" >> /bin/cchown.c \
+	&& echo 'int main (void) { setuid(0); return execl("/bin/chown", "chown", "-R", "php:php", "/home/php/telegram/", NULL); }' >> /bin/cchown.c \
+	&& gcc /bin/cchown.c -o /bin/cchown \
+	&& chown root:root /bin/cchown \
+	&& chmod ugo+x /bin/cchown \
+	&& chmod u+s /bin/cchown \
+	&& rm /bin/cchown.c \
+	&& apk del .build-deps
+
 # copy all files
 WORKDIR /home/php/telegram/
 COPY --chown=php:php . /home/php/telegram/
