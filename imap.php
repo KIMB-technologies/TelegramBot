@@ -1,5 +1,7 @@
 <?php
 
+mb_substitute_character(0xFFFD);
+
 class IMAP {
 
 	private $imap_stream;
@@ -26,6 +28,23 @@ class IMAP {
 				return $data;
 		}	
 	}
+
+	private function convertToUTF8($data) {
+		if( !mb_check_encoding($data, 'UTF-8') ){
+			$enc = mb_detect_encoding($data, mb_detect_order(), true);
+			if( empty($enc) ){
+				$enc = 'UTF-8'; //assume UTF-8 as fallback
+			}
+			return mb_convert_encoding(
+				$data,
+				'UTF-8',
+				$enc
+			);
+		}
+		else{
+			return $data;
+		}
+	}
   
 	private function bodyEncodingHeader( $enc ){
 		switch ($enc) {
@@ -48,7 +67,10 @@ class IMAP {
 			if( $part->type == TYPETEXT ){
 				$simplecontent[] = array(
 					$part->subtype == 'PLAIN' ? 'plain' : 'other',
-					$this->decodeEncodedBody( $part->encoding, imap_fetchbody( $this->imap_stream, $mail->msgno, $prefix . ($key + 1) ) )
+					$this->convertToUTF8( $this->decodeEncodedBody(
+						$part->encoding,
+						imap_fetchbody( $this->imap_stream, $mail->msgno, $prefix . ($key + 1) )
+					))
 				);
 			}
 			if( isset( $part->parts ) ){
@@ -101,7 +123,7 @@ class IMAP {
 					$simplecontent = implode( "\r\n", array_column( $simplecontent, 1 ) );
 				}
 				else {
-					$simplecontent = $this->decodeEncodedBody( $structure->encoding, $body);
+					$simplecontent = $this->convertToUTF8( $this->decodeEncodedBody( $structure->encoding, $body) );
 					$encoding = $this->bodyEncodingHeader( $structure->encoding );
 				}
 			}
