@@ -1,4 +1,4 @@
-FROM php:alpine
+FROM php:7-alpine
 
 # PHP dependencies, create users
 RUN apk add --update --no-cache curl-dev libcap imap-dev openssl-dev \
