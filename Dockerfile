@@ -1,4 +1,4 @@
-FROM php:7-alpine
+FROM php:8-cli-alpine
 
 # PHP dependencies, create users
 RUN apk add --update --no-cache curl-dev libcap imap-dev openssl-dev \
