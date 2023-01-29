@@ -1,7 +1,7 @@
 FROM php:8-cli-alpine
 
 # PHP dependencies, create users
-RUN apk add --update --no-cache curl-dev libcap imap-dev openssl-dev \
+RUN apk add --update --no-cache linux-headers curl-dev libcap imap-dev openssl-dev \
     && docker-php-ext-install sockets \ 
     && docker-php-ext-install curl \
     && PHP_OPENSSL=yes docker-php-ext-configure imap --with-imap --with-imap-ssl \
