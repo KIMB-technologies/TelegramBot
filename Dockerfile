@@ -1,4 +1,4 @@
-FROM php:8-cli-alpine
+FROM php:cli-alpine
 
 # PHP dependencies, create users
 RUN apk add --update --no-cache linux-headers curl-dev libcap imap-dev openssl-dev \
@@ -27,7 +27,7 @@ RUN apk add --no-cache --virtual .build-deps build-base \
 WORKDIR /home/php/telegram/
 COPY --chown=php:php . /home/php/telegram/
 
-RUN rm -rf /home/php/telegram/Dockerfile /home/php/telegram/.travis.yml /home/php/telegram/dockerpublish.sh
+RUN rm -rf /home/php/telegram/Dockerfile
 
 # set server vars
 ENV TELEGRAM_API_TOKEN=tbf \
