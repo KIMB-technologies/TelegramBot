@@ -9,7 +9,7 @@ on:
 env:
   IMAGE_OWNER: kimbtechnologies
   IMAGE_NAME: telegrambot
-  BASE_IMAGE: php:cli-alpine
+  BASE_IMAGE: library/php:cli-alpine
 
 jobs:
   build:
