@@ -22,12 +22,28 @@ class Overview{
 	public function send(){
 		$telebot = new TelegramBot();
 		foreach( $this->a as $to => $msg ){
+
 			$cont = '*Mailoverview*'."\n";
+			$count = 0;
+
 			foreach( $msg as $v ){
-				$cont .= '- ' . $v['tag'] . ' *' . $v['subject'] .'* _'. $v['from'] .'_ '. "\n";
+				$n = '- ' . $v['tag'] . ' *' . $v['subject'] .'* _'. $v['from'] .'_ '. "\n";
+
+				if(mb_strlen($cont . $n) > 4096){
+					$r = $telebot->sendMessage( $cont, $to );
+					Logger::logOverview( $r, $to, $cont, $telebot->getLastResponse() );
+
+					$cont = '*Mailoverview*'."\n";
+					$count = 0;
+				}
+				
+				$cont .= $n; 
+				$count++;				
 			}
-			$r = $telebot->sendMessage( mb_substr( $cont, 0, 4096), $to );
-			Logger::logOverview( $r, $to, mb_substr( $cont, 0, 4096), $telebot->getLastResponse() );
+			if($count > 0){
+				$r = $telebot->sendMessage($cont, $to );
+				Logger::logOverview( $r, $to, $cont, $telebot->getLastResponse() );
+			}
 		}
 	}
 }
