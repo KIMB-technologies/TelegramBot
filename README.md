@@ -79,8 +79,6 @@ The `docker-compose.yml` to setup the Docker Image.
 
 ```yaml
 
-version: '2'
-
 services:
   telebot:
     image: kimbtechnologies/telegrambot:latest

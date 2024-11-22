@@ -1,12 +1,17 @@
 FROM php:cli-alpine
 
-# PHP dependencies, create users
+# PHP ext dependencies
 RUN apk add --update --no-cache linux-headers curl-dev libcap imap-dev openssl-dev \
     && docker-php-ext-install sockets \ 
-    && docker-php-ext-install curl \
-    && PHP_OPENSSL=yes docker-php-ext-configure imap --with-imap --with-imap-ssl \
-    && docker-php-ext-install imap \
-    && setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/php \
+    && docker-php-ext-install curl 
+
+# PHP pecl dependencies
+RUN apk add --update --no-cache $PHPIZE_DEPS krb5-dev \
+	&& pecl install imap \
+	&& docker-php-ext-enable imap
+  
+# create users and configure
+RUN setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/php \
     && addgroup -S php && adduser -S php -G php \
     && mkdir -p /home/php/telegram/ \
     && mkdir /home/php/telegram/log
