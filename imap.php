@@ -31,7 +31,7 @@ class IMAP {
 
 	private function convertToUTF8($data) {
 		if( !mb_check_encoding($data, 'UTF-8') ){
-			$enc = mb_detect_encoding($data, mb_detect_order(), true);
+			$enc = mb_detect_encoding($data, mb_list_encodings(), true);
 			if( empty($enc) ){
 				$enc = 'UTF-8'; //assume UTF-8 as fallback
 			}
