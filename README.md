@@ -68,7 +68,7 @@ class RULES {
 
 ### Docker Compose
 
-The `docker-compose.yml` to setup the Docker Image.
+The [`docker-compose.yml`](docker-compose.yml) to setup the Docker Image.
 
 - `TELEGRAM_API_TOKEN` The TelegramBot token created by the BotFather.
 - `MAIL_SERVER` The IMAP server in [PHP notation](https://www.php.net/manual/de/function.imap-open.php), e.g. `{localhost:993/imap/ssl}INBOX`
@@ -76,39 +76,6 @@ The `docker-compose.yml` to setup the Docker Image.
 - `MAIL_PW` The password for the IMAP account.
 - `SYSDOMAIN` The domain wich will be appended to the `mailto` parts in the rules.
 - `DELETMAILS` Should the mails be deleted? `true, false` (If using `false` mails will be forwarded forever.)
-
-```yaml
-
-services:
-  telebot:
-    image: kimbtechnologies/telegrambot:latest
-    container_name: telegram_mail
-    volumes:
-      - ./rules.php:/home/php/telegram/rules.php:ro # load the rules from outside, rules.php has to be placed on the host manually.
-      # - ./log/:/home/php/telegram/log # place the logs outside of the container, make sure php has the right to write the files
-    restart: always
-    environment:
-      - TELEGRAM_API_TOKEN=tbf
-      - MAIL_SERVER=tbf
-      - MAIL_USER=tbf
-      - MAIL_PW=tbf
-      - SYSDOMAIN=tbf
-      - DELETMAILS=tbf
-    networks:
-      telegram:
-       ipv4_address: 172.19.198.8
-    restart: always
-
-networks:
-  telegram:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        -
-          subnet: 172.19.198.0/24
-
-```
 
 ### New Mail Script
 
