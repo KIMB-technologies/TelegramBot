@@ -11,6 +11,7 @@ env:
   IMAGE_NAME: telegrambot
   BASE_IMAGE: library/php:cli-alpine
   PLATFORMS: linux/amd64
+  DOCKERFILE_PATH: Dockerfile
 
 jobs:
   build:
@@ -53,7 +54,7 @@ jobs:
       run: echo -n "IMAGE_TAG=$(head -n 1 VERSION)" >> $GITHUB_ENV
 
     - name: Docker build and push the main tag
-      run: docker buildx build --platform "$PLATFORMS" . --file "docker/Dockerfile" --tag "$IMAGE_OWNER/$IMAGE_NAME:$IMAGE_TAG" --push
+      run: docker buildx build --platform "$PLATFORMS" . --file "$DOCKERFILE_PATH" --tag "$IMAGE_OWNER/$IMAGE_NAME:$IMAGE_TAG" --push
       if: ${{ (github.event_name == 'push') || (steps.check.outputs.needs-updating == 'true') }}
      
     - name: Push more tags
@@ -64,6 +65,6 @@ jobs:
               echo "Skipping $TAG";
             else 
               echo "Tagging image as $TAG and pushing";
-              docker buildx build --platform "$PLATFORMS" . --file "docker/Dockerfile" --tag "$IMAGE_OWNER/$IMAGE_NAME:$TAG" --push
+              docker buildx build --platform "$PLATFORMS" . --file "$DOCKERFILE_PATH" --tag "$IMAGE_OWNER/$IMAGE_NAME:$TAG" --push
             fi;
           done;
