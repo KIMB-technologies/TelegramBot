@@ -74,7 +74,7 @@ The [`docker-compose.yml`](docker-compose.yml) to setup the Docker Image.
 - `MAIL_USER` The username for the IMAP account.
 - `MAIL_PW` The password for the IMAP account.
 - `SYSDOMAIN` The domain wich will be appended to the `mailto` parts in the rules.
-- `DELETMAILS` Should the mails be deleted? `true, false` (If using `false` mails will be forwarded forever.)
+- `DELETEMAILS` Should the mails be deleted? `true, false` (If using `false` mails will be forwarded forever.)
 
 ### New Mail Script
 

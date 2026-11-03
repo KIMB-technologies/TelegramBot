@@ -40,5 +40,7 @@ class Logger{
 	}
 }
 
-
+if(!is_writable(__DIR__ . '/log/')){
+	echo "Warning: '". __DIR__ ."/log/' is not writable! -- Will not write logs!!";
+}
 ?>

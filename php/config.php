@@ -2,13 +2,13 @@
 
 class CONFIG {
 
-	public static $TELEGRAM;
+	public static array $TELEGRAM;
 
-	public static $MAIL;
+	public static array $MAIL;
 
-	public static $SYSDOMAIN;
+	public static string $SYS_DOMAIN;
 	
-	public static $DELETMAILS;
+	public static bool $DELETE_MAILS;
 
 	public static function setup(){
 		self::$TELEGRAM = array(
@@ -22,9 +22,10 @@ class CONFIG {
 			'pw' => isset( $_ENV['MAIL_PW'] ) ? $_ENV['MAIL_PW'] : ''
 		);
 
-		self::$SYSDOMAIN = isset( $_ENV['SYSDOMAIN'] ) ? $_ENV['SYSDOMAIN'] : 'mail.example.com';
+		self::$SYS_DOMAIN = isset( $_ENV['SYSDOMAIN'] ) ? $_ENV['SYSDOMAIN'] : 'mail.example.com';
 	
-		self::$DELETMAILS = isset( $_ENV['DELETMAILS'] ) && $_ENV['DELETMAILS'] == 'true';
+		self::$DELETE_MAILS = (isset( $_ENV['DELETEMAILS'] ) && $_ENV['DELETEMAILS'] == 'true') ||
+			(isset( $_ENV['DELETMAILS'] ) && $_ENV['DELETMAILS'] == 'true'); # fallback to old typo name
 	}
 }
 CONFIG::setup();

@@ -13,7 +13,7 @@ services:
       - MAIL_USER=tbf
       - MAIL_PW=tbf
       - SYSDOMAIN=tbf
-      - DELETMAILS=tbf
+      - DELETEMAILS=tbf
     networks:
       telegram:
         ipv4_address: 172.19.198.8

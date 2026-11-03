@@ -1,6 +1,6 @@
 
 services:
-  telebot:
+  app:
     container_name: telegram_mail
     volumes:
       - ./rules.php:/home/php/telegram/rules.php:ro
@@ -15,4 +15,4 @@ services:
       - MAIL_USER=tbf
       - MAIL_PW=tbf
       - SYSDOMAIN=tbf
-      - DELETMAILS=true
+      - DELETEMAILS=true

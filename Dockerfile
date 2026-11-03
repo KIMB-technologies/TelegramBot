@@ -28,11 +28,15 @@ RUN apk add --no-cache --virtual .build-deps build-base \
 	&& rm /bin/cchown.c \
 	&& apk del .build-deps
 
-# copy all files
-WORKDIR /home/php/telegram/
-COPY --chown=php:php . /home/php/telegram/
+# define the HEALTHCHECK (pings server)
+HEALTHCHECK --interval=90s --timeout=20s --start-period=10s --retries=3 \
+	CMD curl -fsS http://127.0.0.1/healthz || exit 1
 
-RUN rm -rf /home/php/telegram/Dockerfile
+WORKDIR /home/php/telegram/
+
+# copy all files
+COPY --chown=php:php ./php /home/php/telegram/
+COPY --chown=php:php ./rules.php /home/php/telegram/
 
 # set server vars
 ENV TELEGRAM_API_TOKEN=tbf \
@@ -40,7 +44,7 @@ ENV TELEGRAM_API_TOKEN=tbf \
 	MAIL_USER=tbf \
 	MAIL_PW=tbf \
 	SYSDOMAIN=tbf \
-	DELETMAILS=tbf
+	DELETEMAILS=tbf
 
 # open port
 EXPOSE 80/tcp
