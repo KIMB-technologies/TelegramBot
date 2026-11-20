@@ -3,6 +3,8 @@ services:
   telebot:
     image: kimbtechnologies/telegrambot:latest
     container_name: telegram_mail
+    ports:
+      - "127.0.0.1:8080:80"
     volumes:
       - ./rules.php:/home/php/telegram/rules.php:ro # load the rules from outside, rules.php has to be placed on the host manually.
       # - ./log/:/home/php/telegram/log # place the logs outside of the container, make sure php has the right to write the files
@@ -14,15 +16,3 @@ services:
       - MAIL_PW=tbf
       - SYSDOMAIN=tbf
       - DELETEMAILS=tbf
-    networks:
-      telegram:
-        ipv4_address: 172.19.198.8
-    
-networks:
-  telegram:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        -
-          subnet: 172.19.198.0/24

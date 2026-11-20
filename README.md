@@ -84,7 +84,8 @@ The script which runs the bot and should be called on new mails.
 ```bash
 
 #!/bin/sh
-curl -s 172.19.198.8 > /dev/null
+
+curl -s http://127.0.0.1:8080/ > /dev/null
 
 ```
 

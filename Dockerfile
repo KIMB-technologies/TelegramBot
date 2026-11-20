@@ -1,14 +1,11 @@
 FROM php:cli-alpine
 
 # PHP ext dependencies
-RUN apk add --update --no-cache linux-headers curl-dev libcap imap-dev openssl-dev \
-    && docker-php-ext-install sockets \ 
-    && docker-php-ext-install curl 
-
-# PHP pecl dependencies
-RUN apk add --update --no-cache $PHPIZE_DEPS krb5-dev \
-	&& pecl install imap \
-	&& docker-php-ext-enable imap
+RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/pie,target=/usr/local/bin/pie \
+    apk add --update --no-cache $PHPIZE_DEPS linux-headers openssl-dev libcap imap-dev krb5-dev oniguruma-dev \
+    && docker-php-ext-install mbstring \
+    && docker-php-ext-install sockets \
+    && pie install sirlouen/imap
   
 # create users and configure
 RUN setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/php \
